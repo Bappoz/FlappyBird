@@ -24,7 +24,7 @@ class Pipe:
 
     def move(self):
         """Move o cano para a esquerda, simulando o movimento do cenário"""
-        self.x -= 5  # Move o cano para a esquerda a uma velocidade fixa
+        self.x -= 5  # Move o cano para a esquerda a uma velocidade fixa (5 pixels por frame)
 
     def reset_position(self):
         """Reposiciona o cano à direita da tela e redefine suas alturas"""
