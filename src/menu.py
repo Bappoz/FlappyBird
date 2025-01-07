@@ -4,51 +4,32 @@ from src.config import SCREEN_WIDTH, SCREEN_HEIGHT
 
 class Menu:
     def __init__(self):
-        # Carrega o fundo do menu
         self.background = pygame.image.load("assets/images/background.jpg").convert()
-        
-        # Carrega a imagem do título e ajusta seu tamanho
         self.title_image = pygame.transform.scale(
-            pygame.image.load("assets/images/titulo.png").convert_alpha(), #Converte a superfície da imagem para um formato otimizado com transparência.
-            (500, 150)
+            pygame.image.load("assets/images/titulo.png").convert_alpha(),
+            (500, 200)
         )
-        
-        # Define a fonte para o texto dos botões
-        self.font = pygame.font.Font(None, 50)  
-        
-        # Lista de botões do menu com o texto e a ação correspondente
+        self.font = pygame.font.Font(None, 74)
         self.buttons = [
             {"text": "Jogar", "action": "play"},
-            {"text": "Sair", "action": "exit"},
+            {"text": "Recordes", "action": "records"},
+            {"text": "Sair", "action": "exit"}
         ]
-        
-        # Define a altura do botão e o espaçamento entre os botões
-        self.button_height = 60
+        self.button_width = 200
+        self.button_height = 50
         self.button_spacing = 20
 
     def draw_button(self, screen, text, y_position):
-        """Desenha um botão no menu na posição vertical especificada."""
-        
-        # Cria um retângulo para o botão com largura fixa e altura definida
+        button_font = pygame.font.Font(None, 50)
+        button_text = button_font.render(text, True, (0, 0, 0))
         button_rect = pygame.Rect(
-            SCREEN_WIDTH // 2 - 100, y_position, 200, self.button_height
+            SCREEN_WIDTH // 2 - self.button_width // 2, y_position - self.button_height // 2, self.button_width, self.button_height
         )
-        
-        # Desenha o fundo branco do botão
-        pygame.draw.rect(screen, (255, 255, 255), button_rect)
-        
-        # Desenha a borda preta do botão
-        pygame.draw.rect(screen, (0, 0, 0), button_rect, 3)
+        pygame.draw.rect(screen, (255, 255, 255), button_rect)  # Fundo branco
+        pygame.draw.rect(screen, (0, 0, 0), button_rect, 2)  # Borda preta
+        text_rect = button_text.get_rect(center=button_rect.center)
+        screen.blit(button_text, text_rect)
 
-        # Renderiza o texto do botão
-        text_surface = self.font.render(text, True, (0, 0, 0))
-        
-        # Posiciona o texto no centro do botão
-        screen.blit(
-            text_surface,
-            (SCREEN_WIDTH // 2 - text_surface.get_width() // 2, y_position + 15)
-        )
-    
     def draw(self, screen):
         """Desenha todos os elementos do menu (fundo, título e botões)."""
         
@@ -74,19 +55,12 @@ class Menu:
             if event.type == pygame.QUIT:
                 pygame.quit()  # Fecha o jogo se a janela for fechada
                 sys.exit()
-
-            # Verifica se o evento é um clique com o mouse
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:  # Clique esquerdo do mouse
-                    mouse_x, mouse_y = event.pos
-                    # Verifica se o clique foi em algum dos botões
-                    for index, button in enumerate(self.buttons):
-                        y = 300 + index * (self.button_height + self.button_spacing)
-                        button_rect = pygame.Rect(
-                            SCREEN_WIDTH // 2 - 100, y, 200, self.button_height
-                        )
-                        # Verifica se o clique ocorreu dentro da área do botão
-                        if button_rect.collidepoint(mouse_x, mouse_y):
-                            return button["action"]  # Retorna a ação do botão clicado
-        
-        return None  # Retorna None se nenhum botão for clicado
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                for index, button in enumerate(self.buttons):
+                    y_position = 300 + index * (self.button_height + self.button_spacing)
+                    button_rect = pygame.Rect(
+                        SCREEN_WIDTH // 2 - self.button_width // 2, y_position - self.button_height // 2, self.button_width, self.button_height
+                    )
+                    if button_rect.collidepoint(event.pos):
+                        return button["action"]
+        return None

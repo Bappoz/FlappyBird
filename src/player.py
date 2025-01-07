@@ -1,50 +1,74 @@
 import pygame
+from src.game_object import GameObject
 
-class Player:
+class Player(GameObject):
     def __init__(self):
-        # Carrega a imagem do pássaro e redimensiona para o tamanho desejado
-        self.image = pygame.transform.scale(
+        super().__init__(100, 300, 55, 55)  # herança: Chama o construtor da classe base
+        self._image = pygame.transform.scale(
             pygame.image.load("assets/images/FlappyBird.png").convert_alpha(),
-            (55, 55)  # Redimensiona a imagem para 55x55 pixels
+            (self.width, self.height)
         )
-        
-        # Posição inicial do pássaro na tela
-        self.x = 100  
-        self.y = 300  
-        
-        # Largura e altura da imagem do pássaro
-        self.width = self.image.get_width()
-        self.height = self.image.get_height()
-        
-        # Velocidade inicial do pássaro
-        self.velocity = 0
-        # Gravidade aplicada ao pássaro
-        self.gravity = 0.4
-        # Força de levantamento quando o pássaro pula
-        self.lift = -9.5
-        # Variável que controla se o pássaro está pulando
-        self.jumping = False
+        self._velocity = 0
+        self._gravity = 0.4
+        self._lift = -9.5
+        self._jumping = False
+        self._power_up_count = 0  # Contador de PowerUps coletados
 
     def jump(self):
-        """Faz o pássaro saltar, alterando sua velocidade para um valor negativo"""
-        self.velocity = self.lift  # Aplica o valor da força de levantamento para simular o pulo
-        self.jumping = True  # Marca que o pássaro está no ar (pulando)
+        self._velocity = self._lift
+        self._jumping = True
 
     def update(self):
-        """Atualiza a posição do pássaro com base na velocidade e gravidade"""
-        self.velocity += self.gravity  # Aplica a gravidade, aumentando a velocidade do pássaro
-        self.y += self.velocity  # Atualiza a posição vertical do pássaro
-
-    def get_collision_rect(self):
-        """Retorna o retângulo de colisão do pássaro, com uma margem ajustável"""
-        collision_margin = 10  # Ajusta a margem de colisão para melhorar a detecção
-        return pygame.Rect(
-            self.x + collision_margin,  # Ajusta a posição x do retângulo de colisão
-            self.y + collision_margin,  # Ajusta a posição y do retângulo de colisão
-            self.width - 2 * collision_margin,  # Largura do retângulo de colisão com a margem
-            self.height - 2 * collision_margin  # Altura do retângulo de colisão com a margem
-        )
+        self._velocity += self._gravity
+        self.y += self._velocity
 
     def draw(self, screen):
-        """Desenha a imagem do pássaro na tela"""
-        screen.blit(self.image, (self.x, self.y))  # Desenha a imagem na posição (x, y)
+        screen.blit(self._image, (self.x, self.y))
+
+    def get_collision_rect(self):
+        collision_margin = 10
+        return pygame.Rect(
+            self.x + collision_margin,
+            self.y + collision_margin,
+            self.width - 2 * collision_margin,
+            self.height - 2 * collision_margin
+        )
+
+    def collect_power_up(self):
+        self._power_up_count += 1
+
+    @property
+    def power_up_count(self):
+        return self._power_up_count
+
+    @property
+    def velocity(self):
+        return self._velocity
+
+    @velocity.setter
+    def velocity(self, value):
+        self._velocity = value
+
+    @property
+    def gravity(self):
+        return self._gravity
+
+    @gravity.setter
+    def gravity(self, value):
+        self._gravity = value
+
+    @property
+    def lift(self):
+        return self._lift
+
+    @lift.setter
+    def lift(self, value):
+        self._lift = value
+
+    @property
+    def jumping(self):
+        return self._jumping
+
+    @jumping.setter
+    def jumping(self, value):
+        self._jumping = value

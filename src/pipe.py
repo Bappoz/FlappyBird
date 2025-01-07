@@ -1,56 +1,53 @@
 import pygame
 import random
 from src.config import SCREEN_WIDTH, SCREEN_HEIGHT
+from src.game_object import GameObject
 
-class Pipe:
+class Pipe(GameObject):
     def __init__(self, x):
-        # Define a posição horizontal inicial do cano
-        self.x = x  
-        
-        # Define a largura do cano
-        self.width = 80  
-        
-        # Define a altura do cano como a altura da tela
-        self.height = SCREEN_HEIGHT  
-        
-        # Define o espaço entre o cano superior e o inferior
-        self.gap = 200  
-        
-        # Define a altura do cano superior de forma aleatória, garantindo que o espaço entre os canos seja suficiente
-        self.top_height = random.randint(50, self.height - self.gap - 50)  
-        
-        # A altura do cano inferior é calculada com base na altura da tela e na altura do cano superior
-        self.bottom_height = self.height - self.top_height - self.gap  
+        super().__init__(x, 0, 80, SCREEN_HEIGHT) # herança: Chama o construtor da classe base
+        self._gap = 200
+        self._top_height = random.randint(50, self.height - self._gap - 50)
+        self._bottom_height = self.height - self._top_height - self._gap
 
-    def move(self):
-        """Move o cano para a esquerda, simulando o movimento do cenário"""
-        self.x -= 5  # Move o cano para a esquerda a uma velocidade fixa (5 pixels por frame)
+    def update(self):
+        self.x -= 5
 
     def reset_position(self):
-        """Reposiciona o cano à direita da tela e redefine suas alturas"""
-        self.x = SCREEN_WIDTH + 200  # Reposiciona o cano para o lado direito da tela (fora da tela)
-        
-        # Redefine a altura do cano superior aleatoriamente
-        self.top_height = random.randint(50, self.height - self.gap - 50)  
-        
-        # Redefine a altura do cano inferior, garantindo que a distância entre os canos seja mantida
-        self.bottom_height = self.height - self.top_height - self.gap  
+        self.x = SCREEN_WIDTH + 200
+        self._top_height = random.randint(50, self.height - self._gap - 50)
+        self._bottom_height = self.height - self._top_height - self._gap
 
     def draw(self, screen):
-        """Desenha o cano na tela"""
-        # Desenha o cano superior em verde
-        pygame.draw.rect(screen, (0, 255, 0), (self.x, 0, self.width, self.top_height))
-        
-        # Desenha o cano inferior em verde
-        pygame.draw.rect(screen, (0, 255, 0), (self.x, self.height - self.bottom_height, self.width, self.bottom_height))
+        pygame.draw.rect(screen, (0, 255, 0), (self.x, 0, self.width, self._top_height))
+        pygame.draw.rect(screen, (0, 255, 0), (self.x, self.height - self._bottom_height, self.width, self._bottom_height))
 
-    def collide(self, player):
-        """Verifica se o pássaro colidiu com o cano"""
-        
-        # Obtém o retângulo de colisão do pássaro
-        player_rect = player.get_collision_rect()
+    def get_collision_rect(self):
+        return [
+            pygame.Rect(self.x, 0, self.width, self._top_height),
+            pygame.Rect(self.x, self.height - self._bottom_height, self.width, self._bottom_height)
+        ]
 
-        # Verifica se o retângulo do pássaro colide com o cano superior ou inferior
-        if player_rect.colliderect(pygame.Rect(self.x, 0, self.width, self.top_height)) or player_rect.colliderect(pygame.Rect(self.x, self.height - self.bottom_height, self.width, self.bottom_height)):
-            return True  # Retorna True se houve colisão
-        return False  # Retorna False se não houve colisão
+    @property
+    def gap(self):
+        return self._gap
+
+    @gap.setter
+    def gap(self, value):
+        self._gap = value
+
+    @property
+    def top_height(self):
+        return self._top_height
+
+    @top_height.setter
+    def top_height(self, value):
+        self._top_height = value
+
+    @property
+    def bottom_height(self):
+        return self._bottom_height
+
+    @bottom_height.setter
+    def bottom_height(self, value):
+        self._bottom_height = value

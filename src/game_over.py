@@ -40,6 +40,7 @@ class GameOverScreen:
         button_width = 200 # Define a largura do botão
         # Cria um retângulo para o botão
         button_rect = pygame.Rect((SCREEN_WIDTH - button_width) // 2, y_position, button_width, self.button_height)
+        pygame.draw.rect(screen, (255, 255, 255), button_rect)  # Fundo branco
         pygame.draw.rect(screen, (0, 0, 0), button_rect, 2) # Desenha o retângulo do botão
         text_surface = font.render(text, True, (0, 0, 0)) # Renderiza o texto do botão
         text_rect = text_surface.get_rect(center=button_rect.center) # Centraliza o texto no retângulo do botão
