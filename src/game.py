@@ -14,7 +14,7 @@ class Game:
         pygame.display.set_caption("Cópia Flappy Bird")  # Define o título da janela
         self.clock = pygame.time.Clock()  # Controla o FPS do jogo
         self.background = pygame.image.load("assets/images/background.jpg").convert()  # Carrega o fundo do jogo
-        self.background_x = 0  # Posição inicial do fundo (movendo para a esquerda)
+        self.background_x = 0  # Posição inicial do fundo (inicializar o movimento do fundo)
 
         # Inicializa o menu do jogo
         self.menu = Menu()
@@ -29,7 +29,7 @@ class Game:
         self.sound_jump = pygame.mixer.Sound("assets/sounds/audiojump.mp3")  # Som do pulo
         pygame.mixer.SoundType.set_volume(self.sound_jump, 0.3)  # Ajusta o volume do som de pulo
         self.sound_score = pygame.mixer.Sound("assets/sounds/pontuacao.mp3")  # Som de pontuação
-        self.sound_death = pygame.mixer.Sound("assets/sounds/morte.mp3")  # Som de morte
+        self.sound_morte = pygame.mixer.Sound("assets/sounds/morte.mp3")  # Som de morte
 
     def reset_game(self):
         """Reseta o estado do jogo."""
@@ -53,11 +53,9 @@ class Game:
             if action == "play":
                 self.start_game()  # Inicia o jogo se o botão 'play' for pressionado
                 break
-            elif action == "records":
-                print("Exibir recordes!")  # Aqui você pode implementar a exibição de recordes
             elif action == "exit":
                 pygame.quit()  # Sai do jogo se o botão 'exit' for pressionado
-                sys.exit()
+                sys.exit()     # encerra o jogo mais limpo
 
             pygame.display.update()  # Atualiza a tela
             self.clock.tick(FPS)  # Controla o FPS do jogo
@@ -84,11 +82,11 @@ class Game:
 
     def update(self):
         """Atualiza a posição do pássaro e os canos, verifica colisões e pontuação."""
-        self.player.update()  # Atualiza a posição do jogador
+        self.player.update()  # Atualiza a posição do jogador (loop de atualização)
         
         # Verifica se o pássaro tocou no chão ou no teto, gerando uma morte
         if self.player.y <= 0 or self.player.y + self.player.height >= SCREEN_HEIGHT:
-            self.sound_death.play()  # Toca o som de morte
+            self.sound_morte.play()  # Toca o som de morte
             self.game_over()  # Chama a tela de Game Over
         
         # Atualiza a movimentação dos canos
@@ -99,7 +97,7 @@ class Game:
                 self.score += 1  # Aumenta a pontuação
                 self.sound_score.play()  # Toca o som de pontuação
             if pipe.collide(self.player):  # Verifica se houve colisão entre o pássaro e o cano
-                self.sound_death.play()  # Toca o som de morte
+                self.sound_morte.play()  # Toca o som de morte
                 self.game_over()  # Chama a tela de Game Over
 
     def draw(self):
@@ -124,7 +122,7 @@ class Game:
         self.handle_game_over()  # Lida com a escolha após o Game Over
 
     def handle_game_over(self):
-        """Lida com a escolha do jogador após o Game Over (reiniciar ou ir para o menu)."""
+        """Lida com a escolha do jogador após o Game Over."""
         while True:
             action = self.game_over_screen.handle_events()  # Espera a interação do jogador
             if action == "restart":
@@ -138,6 +136,7 @@ class Game:
         """Inicia o jogo, mostrando o menu inicial e executando o loop principal do jogo."""
         self.run_menu()  # Exibe o menu inicial
 
-if __name__ == "__main__":
+# Garante que o bloco de código dentro dele só seja executado quando o script é executado diretamente.
+if __name__ == "__main__": 
     game = Game()  # Cria uma instância do jogo
     game.run()  # Executa o jogo
