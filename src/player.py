@@ -21,7 +21,7 @@ class Player:
         # Gravidade aplicada ao pássaro
         self.gravity = 0.4
         # Força de levantamento quando o pássaro pula
-        self.lift = -10
+        self.lift = -9.5
         # Variável que controla se o pássaro está pulando
         self.jumping = False
 
