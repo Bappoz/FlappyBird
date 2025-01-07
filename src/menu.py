@@ -9,7 +9,7 @@ class Menu:
         
         # Carrega a imagem do título e ajusta seu tamanho
         self.title_image = pygame.transform.scale(
-            pygame.image.load("assets/images/titulo.png").convert_alpha(),
+            pygame.image.load("assets/images/titulo.png").convert_alpha(), #Converte a superfície da imagem para um formato otimizado com transparência.
             (500, 150)
         )
         
@@ -63,7 +63,7 @@ class Menu:
         
         # Desenha os botões na tela, com um espaçamento entre eles
         for index, button in enumerate(self.buttons):
-            y_position = 250 + index * (self.button_height + self.button_spacing)
+            y_position = 300 + index * (self.button_height + self.button_spacing)
             self.draw_button(screen, button["text"], y_position)
 
     def handle_events(self):
@@ -81,7 +81,7 @@ class Menu:
                     mouse_x, mouse_y = event.pos
                     # Verifica se o clique foi em algum dos botões
                     for index, button in enumerate(self.buttons):
-                        y = 250 + index * (self.button_height + self.button_spacing)
+                        y = 300 + index * (self.button_height + self.button_spacing)
                         button_rect = pygame.Rect(
                             SCREEN_WIDTH // 2 - 100, y, 200, self.button_height
                         )
