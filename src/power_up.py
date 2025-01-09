@@ -12,10 +12,11 @@ class PowerUp(GameObject):
             (self.width, self.height)
         )
         self._collected = False  # Inicialmente o power-up não foi coletado
+        self.speed = 5  # Velocidade de movimento do power-up
 
     def update(self):
         """Atualiza a posição do power-up, movendo-o para a esquerda e reposicionando quando sai da tela."""
-        self.x -= 5
+        self.x -= self.speed # Move o power-up para a esquerda
         if self.x + self.width < 0:
             self.reset_position()
 

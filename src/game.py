@@ -59,7 +59,7 @@ class Game:
                 self.start_game()  # Inicia o jogo
                 break
             elif action == "records":
-                self.handle_back_to_menu()  # Mostra os recordes e retorna ao menu
+                self.menu_records()  # Mostra os recordes e retorna ao menu
                 break
             elif action == "exit":
                 pygame.quit()
@@ -68,20 +68,10 @@ class Game:
             pygame.display.update()  # Atualiza a tela
             self.clock.tick(FPS)
 
-    def handle_back_to_menu(self):
+    def menu_records(self):
         """Gerencia a transição de volta ao menu após visualizar os recordes."""
         self.records.show_records(self.screen)
         self.run_menu()
-
-    def run_game(self):
-        """Loop principal do jogo."""
-        while self.running:
-            self.handle_events()  # Lida com eventos do jogador
-            self.update()  # Atualiza o estado do jogo
-            self.draw()  # Renderiza os elementos na tela
-            self.clock.tick(FPS)  # Mantém a taxa de quadros
-
-        self.game_over()  # Exibe a tela de Game Over quando o jogo termina
 
     def handle_events(self):
         """Lida com eventos, como teclas pressionadas."""
@@ -96,6 +86,7 @@ class Game:
     def update(self):
         """Atualiza os elementos do jogo (jogador, canos e power-ups)."""
         self.player.update()  # Atualiza a posição do jogador
+        
         if self.player.y > SCREEN_HEIGHT or self.player.y < 0:  # Verifica colisão com os limites da tela
             self.sound_death.play()
             self.running = False
@@ -108,8 +99,11 @@ class Game:
                 self.score += 1
                 self.sound_score.play()
                 # Aumenta a velocidade dos canos a cada número específico de pontos
-                if self.score in {25, 50, 60, 75, 100}:
-                    self.pipe_speed += 1
+                if self.score in {25, 50, 60, 75, 100, 115}:
+                    self.pipe_speed += 1.5
+                    for power_up in self.power_ups:
+                        power_up.speed += 1.5
+                    
 
             # Verifica colisão com o jogador
             if any(pipe_rect.colliderect(self.player.get_collision_rect()) for pipe_rect in pipe.get_collision_rect()):
@@ -168,6 +162,16 @@ class Game:
     def run(self):
         """Inicia o ciclo do jogo começando pelo menu principal."""
         self.run_menu()
+        
+    def run_game(self):
+        """Loop principal do jogo."""
+        while self.running:
+            self.handle_events()  # Lida com eventos do jogador
+            self.update()  # Atualiza o estado do jogo
+            self.draw()  # Renderiza os elementos na tela
+            self.clock.tick(FPS)  # Mantém a taxa de quadros
+
+        self.game_over()  # Exibe a tela de Game Over quando o jogo termina
 
 if __name__ == "__main__":
     game = Game()
