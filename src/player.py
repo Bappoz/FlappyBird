@@ -21,7 +21,7 @@ class Player(GameObject):
 
     def update(self):
         """Atualiza a posição do jogador com base na velocidade e gravidade."""
-        self._velocity += self._gravity
+        self._velocity += self._gravity # Faz com que a velocidade do jogador aumente continuamente enquanto ele cai
         self.y += self._velocity
 
     def draw(self, screen):
