@@ -128,8 +128,10 @@ class Game:
         # Desenha os canos e power-ups
         for pipe in self.pipes:
             pipe.draw(self.screen)
+            
         for power_up in self.power_ups:
             power_up.draw(self.screen)
+            
         self.player.draw(self.screen)  # Desenha o jogador
         
         # Exibe pontuação e contagem de power-ups

@@ -5,7 +5,6 @@ class GameOverScreen:
     def __init__(self, final_score):
         """
         Inicializa a tela de Game Over com a pontuação final e elementos visuais.
-        :param final_score: Pontuação final do jogador.
         """
         self.final_score = final_score  # Salva a pontuação final do jogador
         self.font = pygame.font.Font(None, 50)  # Define a fonte padrão para textos maiores
@@ -28,7 +27,7 @@ class GameOverScreen:
     def draw(self, screen):
         """
         Desenha a tela de Game Over incluindo texto, imagem e botões.
-        :param screen: A superfície onde os elementos serão desenhados.
+    
         """
         # Desenha a imagem "Game Over" no centro da tela
         screen.blit(self.game_over_image, self.game_over_image_rect)
@@ -41,13 +40,7 @@ class GameOverScreen:
             self.draw_button(screen, button["label"], button["y_position"], button["font"])
 
     def display_text(self, screen, text, color, y_position):
-        """
-        Exibe um texto centralizado na tela.
-        :param screen: A superfície onde o texto será desenhado.
-        :param text: O conteúdo do texto.
-        :param color: Cor do texto em formato RGB.
-        :param y_position: Posição vertical do texto na tela.
-        """
+        
         # Renderiza o texto com a fonte definida e a cor fornecida
         text_surface = self.font.render(text, True, color)
         # Centraliza o texto horizontalmente na tela
@@ -56,13 +49,7 @@ class GameOverScreen:
         screen.blit(text_surface, text_rect)
 
     def draw_button(self, screen, text, y_position, font):
-        """
-        Desenha um botão retangular com texto centralizado.
-        :param screen: A superfície onde o botão será desenhado.
-        :param text: O texto do botão.
-        :param y_position: Posição vertical do botão.
-        :param font: A fonte usada para o texto do botão.
-        """
+        
         button_width = 200  # Define uma largura fixa para todos os botões
         # Cria o retângulo que representa o botão
         button_rect = pygame.Rect(
@@ -82,7 +69,7 @@ class GameOverScreen:
     def handle_events(self):
         """
         Lida com eventos da tela de Game Over, como cliques do mouse.
-        :return: A ação correspondente ao botão clicado ou None se nenhum botão foi clicado.
+       
         """
         # Percorre todos os eventos capturados pelo Pygame
         for event in pygame.event.get():
